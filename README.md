@@ -1,2 +1,2 @@
-# cinpal-pecas-originais
+# Cinpal Peças Originais
 Arquivos catálogo online Cinpal
