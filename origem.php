@@ -4,7 +4,7 @@
 		<div class="container">
 			<!-- BEGIN PAGE TITLE -->
 			<div class="page-title">
-				<h1>Produtos (Catálogo)</h1>
+				<h1>Origem</h1>
 			</div>
 			<!-- END PAGE TITLE -->
 			<!-- BEGIN PAGE TOOLBAR -->
@@ -28,22 +28,15 @@
 
 
  <p>&nbsp;</p>
-                 <a href="adicionar-produto.php" class="btn btn-primary">Adicionar produto</a>
+                 <a href="adicionar-origem.php" class="btn btn-primary">Adicionar Origem</a>
                  <p>&nbsp;</p>
 
 
                  <table id="dataSelect" data-order='[[ 0, "asc" ]]' class="table table-hover">
                   <thead>
                  
-                    <th style="padding-left:8px;"><b>Origem</b></th>
-                    <th style="padding-left:8px;"><b>Agregado</b></th>   
-                    <th style="padding-left:8px;"><b>Número Original</b></th>   
-                    <th style="padding-left:8px;"><b>Número Cinpal</b></th>
-                    <th style="padding-left:8px;"><b>Denominação</b></th>  
-                    <th style="padding-left:8px;"><b>Modelo</b></th> 
-                    <th style="padding-left:8px;"><b>Nº peça</b></th> 
-                    <th style="padding-left:8px;"><b>Posição</b></th> 
-                    <th style="padding-left:8px;"><b>Nota</b></th>   
+                    <th style="padding-left:8px;width:177px !important;"><b>Nº Origem</b></th>
+                    <th style="padding-left:8px;"><b>Descrição</b></th>    
                     <th style="padding-left:8px;"><b>Ações</b></th>                  
                   </thead>
                  
@@ -52,7 +45,7 @@
 <?php 
 require("conexao.php");
 
-$sql = "SELECT * FROM produtos";
+$sql = "SELECT * FROM origem";
 $result = $PDO->query( $sql );
 $linha = $result->fetchAll( PDO::FETCH_ASSOC );
 
@@ -61,30 +54,23 @@ $tot_cliente = count($linha);
 $i = 0;
 
 while($i<$tot_cliente):
-if($linha[$i]["denominacao"]!="NNN" && $linha[$i]["denominacao"]!=""):
+
 ?>
 
 <tr>
 
-   <td><?php echo $linha[$i]["origem"]; ?></td>
-   <td><?php echo $linha[$i]["agregado"]; ?></td>
-   <td><?php echo $linha[$i]["num_original"]; ?></td>
-   <td><?php echo $linha[$i]["num_cinpal"]; ?></td>
-   <td><?php echo $linha[$i]["denominacao"]; ?></td>
-   <td><?php echo $linha[$i]["modelo"]; ?></td>
-   <td><?php echo $linha[$i]["numero_desenho"]; ?></td>
-   <td><?php echo $linha[$i]["posicao"]; ?></td>
-   <td><?php echo $linha[$i]["nota"]; ?></td>
+   <td style="width:177px !important;"><?php echo $linha[$i]["origem"]; ?></td>
+   <td><?php echo $linha[$i]["descricao"]; ?></td>
+  
    <td>
-      <a href="ver-produto.php?id=<?php echo $linha[$i]["id"]; ?>" class="btn btn-primary btn-xs" >ver</a>
-     <!-- <a href="editar-produto.php?id=<?php echo $linha[$i]["id"]; ?>" class="btn btn-warning btn-xs" >editar</a>
-      <a href="listar-produtos.php?id=<?php echo $linha[$i]["id"]; ?>" class="btn btn-danger btn-xs">excluir</a> -->
+      <a href="editar-origem.php?id=<?php echo $linha[$i]["id"]; ?>" class="btn btn-warning btn-xs" >editar</a>
+      <a href="origem.php?id=<?php echo $linha[$i]["id"]; ?>" class="btn btn-danger btn-xs">excluir</a>
    </td>
 
 </tr>
 
 <?php 
-endif;
+
 $i++;
 endwhile;
 
@@ -156,7 +142,7 @@ if($_GET["id"]):
 <script type="text/javascript">
 
 
-    swal({   title: "Confirma a exclusão do produto?",   text: "Essa ação não pode ser revertida",   type: "warning",   showCancelButton: true,   confirmButtonColor: "#DD6B55",   confirmButtonText: "Sim, apagar",   cancelButtonText: "Não, cancelar!",   closeOnConfirm: false,   closeOnCancel: false }, function(isConfirm){   if (isConfirm) {   swal("Apagado!", "Produto apagado com sucesso.", "success");  location.href="excluir-produto.php?id=<?php echo $_GET['id']; ?>" } else {     swal("Cancelado", "Pedido cancelado", "error");   } });
+    swal({   title: "Confirma a exclusão da origem?",   text: "Essa ação não pode ser revertida",   type: "warning",   showCancelButton: true,   confirmButtonColor: "#DD6B55",   confirmButtonText: "Sim, apagar",   cancelButtonText: "Não, cancelar!",   closeOnConfirm: false,   closeOnCancel: false }, function(isConfirm){   if (isConfirm) {   swal("Apagado!", "Origem apagada com sucesso.", "success");  location.href="excluir-origem.php?id=<?php echo $_GET['id']; ?>" } else {     swal("Cancelado", "Pedido cancelado", "error");   } });
 
   
 
@@ -165,7 +151,7 @@ if($_GET["id"]):
 <?php 
 
 // ALERTA DE CONFIRMAÇÃO DE EXCLUSÃO DE CLIENTE
-if($_GET["status"]=="sucesso"): echo '<script type="text/javascript">swal("Muito bem!", "Produto foi removido com sucesso", "success");</script>'; endif; ?>
+if($_GET["status"]=="sucesso"): echo '<script type="text/javascript">swal("Muito bem!", "Origem foi removida com sucesso", "success");</script>'; endif; ?>
 
 
 <!-- END JAVASCRIPTS -->

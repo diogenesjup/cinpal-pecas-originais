@@ -4,7 +4,7 @@
 		<div class="container">
 			<!-- BEGIN PAGE TITLE -->
 			<div class="page-title">
-				<h1>Produtos (Catálogo)</h1>
+				<h1>Banners rotativos</h1>
 			</div>
 			<!-- END PAGE TITLE -->
 			<!-- BEGIN PAGE TOOLBAR -->
@@ -28,22 +28,17 @@
 
 
  <p>&nbsp;</p>
-                 <a href="adicionar-produto.php" class="btn btn-primary">Adicionar produto</a>
+                 <a href="adicionar-banner.php" class="btn btn-primary">Adicionar banner</a>
                  <p>&nbsp;</p>
 
 
                  <table id="dataSelect" data-order='[[ 0, "asc" ]]' class="table table-hover">
                   <thead>
-                 
-                    <th style="padding-left:8px;"><b>Origem</b></th>
-                    <th style="padding-left:8px;"><b>Agregado</b></th>   
-                    <th style="padding-left:8px;"><b>Número Original</b></th>   
-                    <th style="padding-left:8px;"><b>Número Cinpal</b></th>
-                    <th style="padding-left:8px;"><b>Denominação</b></th>  
-                    <th style="padding-left:8px;"><b>Modelo</b></th> 
-                    <th style="padding-left:8px;"><b>Nº peça</b></th> 
-                    <th style="padding-left:8px;"><b>Posição</b></th> 
-                    <th style="padding-left:8px;"><b>Nota</b></th>   
+                    <th style="padding-left:8px;"><b>#</b></th>
+                    <th style="padding-left:8px;"><b>Foto</b></th>
+                    <th style="padding-left:8px;"><b>Título</b></th>   
+                    <th style="padding-left:8px;"><b>Subtitulo</b></th>   
+         
                     <th style="padding-left:8px;"><b>Ações</b></th>                  
                   </thead>
                  
@@ -52,7 +47,7 @@
 <?php 
 require("conexao.php");
 
-$sql = "SELECT * FROM produtos";
+$sql = "SELECT * FROM banners";
 $result = $PDO->query( $sql );
 $linha = $result->fetchAll( PDO::FETCH_ASSOC );
 
@@ -61,30 +56,24 @@ $tot_cliente = count($linha);
 $i = 0;
 
 while($i<$tot_cliente):
-if($linha[$i]["denominacao"]!="NNN" && $linha[$i]["denominacao"]!=""):
+
 ?>
 
 <tr>
+   <td><?php echo $linha[$i]["id"]; ?></td>
+   <td><img src="images/<?php echo $linha[$i]["foto"]; ?>" style="width:130px;height:auto;" /></td>
+   <td><?php echo $linha[$i]["titulo"]; ?></td>
+   <td><?php echo $linha[$i]["subtitulo"]; ?></td>
 
-   <td><?php echo $linha[$i]["origem"]; ?></td>
-   <td><?php echo $linha[$i]["agregado"]; ?></td>
-   <td><?php echo $linha[$i]["num_original"]; ?></td>
-   <td><?php echo $linha[$i]["num_cinpal"]; ?></td>
-   <td><?php echo $linha[$i]["denominacao"]; ?></td>
-   <td><?php echo $linha[$i]["modelo"]; ?></td>
-   <td><?php echo $linha[$i]["numero_desenho"]; ?></td>
-   <td><?php echo $linha[$i]["posicao"]; ?></td>
-   <td><?php echo $linha[$i]["nota"]; ?></td>
    <td>
-      <a href="ver-produto.php?id=<?php echo $linha[$i]["id"]; ?>" class="btn btn-primary btn-xs" >ver</a>
-     <!-- <a href="editar-produto.php?id=<?php echo $linha[$i]["id"]; ?>" class="btn btn-warning btn-xs" >editar</a>
-      <a href="listar-produtos.php?id=<?php echo $linha[$i]["id"]; ?>" class="btn btn-danger btn-xs">excluir</a> -->
+      <a href="editar-banner.php?id=<?php echo $linha[$i]["id"]; ?>" class="btn btn-warning btn-xs" >editar</a>
+      <a href="banners.php?id=<?php echo $linha[$i]["id"]; ?>" class="btn btn-danger btn-xs">excluir</a>
    </td>
 
 </tr>
 
 <?php 
-endif;
+
 $i++;
 endwhile;
 
@@ -156,7 +145,7 @@ if($_GET["id"]):
 <script type="text/javascript">
 
 
-    swal({   title: "Confirma a exclusão do produto?",   text: "Essa ação não pode ser revertida",   type: "warning",   showCancelButton: true,   confirmButtonColor: "#DD6B55",   confirmButtonText: "Sim, apagar",   cancelButtonText: "Não, cancelar!",   closeOnConfirm: false,   closeOnCancel: false }, function(isConfirm){   if (isConfirm) {   swal("Apagado!", "Produto apagado com sucesso.", "success");  location.href="excluir-produto.php?id=<?php echo $_GET['id']; ?>" } else {     swal("Cancelado", "Pedido cancelado", "error");   } });
+    swal({   title: "Confirma a exclusão do banner?",   text: "Essa ação não pode ser revertida",   type: "warning",   showCancelButton: true,   confirmButtonColor: "#DD6B55",   confirmButtonText: "Sim, apagar",   cancelButtonText: "Não, cancelar!",   closeOnConfirm: false,   closeOnCancel: false }, function(isConfirm){   if (isConfirm) {   swal("Apagado!", "Banner apagado com sucesso.", "success");  location.href="excluir-banner.php?id=<?php echo $_GET['id']; ?>" } else {     swal("Cancelado", "Pedido cancelado", "error");   } });
 
   
 
@@ -165,9 +154,9 @@ if($_GET["id"]):
 <?php 
 
 // ALERTA DE CONFIRMAÇÃO DE EXCLUSÃO DE CLIENTE
-if($_GET["status"]=="sucesso"): echo '<script type="text/javascript">swal("Muito bem!", "Produto foi removido com sucesso", "success");</script>'; endif; ?>
+if($_GET["status"]=="sucesso"): echo '<script type="text/javascript">swal("Muito bem!", "Banner foi removido com sucesso", "success");</script>'; endif; ?>
 
-
+?>
 <!-- END JAVASCRIPTS -->
 </body>
 <!-- END BODY -->

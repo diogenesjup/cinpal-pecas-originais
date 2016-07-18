@@ -27,23 +27,20 @@
               
 
 
- <p>&nbsp;</p>
-                 <a href="adicionar-produto.php" class="btn btn-primary">Adicionar produto</a>
-                 <p>&nbsp;</p>
+
 
 
                  <table id="dataSelect" data-order='[[ 0, "asc" ]]' class="table table-hover">
                   <thead>
                  
-                    <th style="padding-left:8px;"><b>Origem</b></th>
-                    <th style="padding-left:8px;"><b>Agregado</b></th>   
-                    <th style="padding-left:8px;"><b>Número Original</b></th>   
-                    <th style="padding-left:8px;"><b>Número Cinpal</b></th>
-                    <th style="padding-left:8px;"><b>Denominação</b></th>  
-                    <th style="padding-left:8px;"><b>Modelo</b></th> 
-                    <th style="padding-left:8px;"><b>Nº peça</b></th> 
-                    <th style="padding-left:8px;"><b>Posição</b></th> 
-                    <th style="padding-left:8px;"><b>Nota</b></th>   
+                    <th style="padding-left:8px;"><b>Descrição</b></th>
+                    <th style="padding-left:8px;"><b>Número Cinpal</b></th>   
+                    <th style="padding-left:8px;"><b>Código</b></th>   
+                    <th style="padding-left:8px;"><b>Tipo Aplicação</b></th>
+                    <th style="padding-left:8px;"><b>Aplicação</b></th>  
+                    <th style="padding-left:8px;"><b>Montadora</b></th>  
+                    <th style="padding-left:8px;"><b>Veículo</b></th>   
+                    <th style="padding-left:8px;"><b>Nº Referência</b></th>  
                     <th style="padding-left:8px;"><b>Ações</b></th>                  
                   </thead>
                  
@@ -61,24 +58,21 @@ $tot_cliente = count($linha);
 $i = 0;
 
 while($i<$tot_cliente):
-if($linha[$i]["denominacao"]!="NNN" && $linha[$i]["denominacao"]!=""):
+if($linha[$i]["num_cinpal"]!="n/a"):
 ?>
 
 <tr>
 
-   <td><?php echo $linha[$i]["origem"]; ?></td>
-   <td><?php echo $linha[$i]["agregado"]; ?></td>
-   <td><?php echo $linha[$i]["num_original"]; ?></td>
+   <td><?php echo $linha[$i]["descricao"]; ?></td>
    <td><?php echo $linha[$i]["num_cinpal"]; ?></td>
-   <td><?php echo $linha[$i]["denominacao"]; ?></td>
-   <td><?php echo $linha[$i]["modelo"]; ?></td>
-   <td><?php echo $linha[$i]["numero_desenho"]; ?></td>
-   <td><?php echo $linha[$i]["posicao"]; ?></td>
-   <td><?php echo $linha[$i]["nota"]; ?></td>
+   <td><?php echo $linha[$i]["codigo"]; ?></td>
+   <td><?php echo $linha[$i]["tipo_aplicacao"]; ?></td>
+   <td><?php echo $linha[$i]["aplicacao"]; ?></td>
+   <td><?php echo $linha[$i]["montadora"]; ?></td>
+   <td><?php echo $linha[$i]["viuculo"]; ?></td>
+   <td><?php echo $linha[$i]["num_referencia"]; ?></td>
    <td>
       <a href="ver-produto.php?id=<?php echo $linha[$i]["id"]; ?>" class="btn btn-primary btn-xs" >ver</a>
-     <!-- <a href="editar-produto.php?id=<?php echo $linha[$i]["id"]; ?>" class="btn btn-warning btn-xs" >editar</a>
-      <a href="listar-produtos.php?id=<?php echo $linha[$i]["id"]; ?>" class="btn btn-danger btn-xs">excluir</a> -->
    </td>
 
 </tr>

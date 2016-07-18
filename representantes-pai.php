@@ -4,7 +4,7 @@
 		<div class="container">
 			<!-- BEGIN PAGE TITLE -->
 			<div class="page-title">
-				<h1>Produtos (Catálogo)</h1>
+				<h1>Representantes Cinpal</h1>
 			</div>
 			<!-- END PAGE TITLE -->
 			<!-- BEGIN PAGE TOOLBAR -->
@@ -28,22 +28,20 @@
 
 
  <p>&nbsp;</p>
-                 <a href="adicionar-produto.php" class="btn btn-primary">Adicionar produto</a>
+                 <a href="add-representantes-pai.php" class="btn btn-primary">Adicionar representante</a>
                  <p>&nbsp;</p>
 
 
-                 <table id="dataSelect" data-order='[[ 0, "asc" ]]' class="table table-hover">
+                 <table id="dataSelect" data-order='[[ 1, "asc" ]]' class="table table-hover">
                   <thead>
-                 
-                    <th style="padding-left:8px;"><b>Origem</b></th>
-                    <th style="padding-left:8px;"><b>Agregado</b></th>   
-                    <th style="padding-left:8px;"><b>Número Original</b></th>   
-                    <th style="padding-left:8px;"><b>Número Cinpal</b></th>
-                    <th style="padding-left:8px;"><b>Denominação</b></th>  
-                    <th style="padding-left:8px;"><b>Modelo</b></th> 
-                    <th style="padding-left:8px;"><b>Nº peça</b></th> 
-                    <th style="padding-left:8px;"><b>Posição</b></th> 
-                    <th style="padding-left:8px;"><b>Nota</b></th>   
+                    <th style="padding-left:8px;"><b>#</b></th>
+                    <th style="padding-left:8px;"><b>Nome</b></th>
+                    <th style="padding-left:8px;"><b>Tipo</b></th>
+                    <th style="padding-left:8px;"><b>CPF / CNPJ</b></th>
+                    <th style="padding-left:8px;"><b>Login</b></th>   
+                    <th style="padding-left:8px;"><b>E-mail</b></th> 
+                    <th style="padding-left:8px;"><b>Telefone</b></th>
+                    <th style="padding-left:8px;"><b>Data cadastro</b></th>   
                     <th style="padding-left:8px;"><b>Ações</b></th>                  
                   </thead>
                  
@@ -52,7 +50,7 @@
 <?php 
 require("conexao.php");
 
-$sql = "SELECT * FROM produtos";
+$sql = "SELECT * FROM representantes";
 $result = $PDO->query( $sql );
 $linha = $result->fetchAll( PDO::FETCH_ASSOC );
 
@@ -61,32 +59,35 @@ $tot_cliente = count($linha);
 $i = 0;
 
 while($i<$tot_cliente):
-if($linha[$i]["denominacao"]!="NNN" && $linha[$i]["denominacao"]!=""):
+
+if($linha[$i]["tipo"]!=""):
+
 ?>
 
 <tr>
-
-   <td><?php echo $linha[$i]["origem"]; ?></td>
-   <td><?php echo $linha[$i]["agregado"]; ?></td>
-   <td><?php echo $linha[$i]["num_original"]; ?></td>
-   <td><?php echo $linha[$i]["num_cinpal"]; ?></td>
-   <td><?php echo $linha[$i]["denominacao"]; ?></td>
-   <td><?php echo $linha[$i]["modelo"]; ?></td>
-   <td><?php echo $linha[$i]["numero_desenho"]; ?></td>
-   <td><?php echo $linha[$i]["posicao"]; ?></td>
-   <td><?php echo $linha[$i]["nota"]; ?></td>
+   <td><?php echo $linha[$i]["id"]; ?></td>
+   <td><?php echo $linha[$i]["nome"]; ?></td>
+   <td><?php echo $linha[$i]["tipo"]; ?></td>
+   <td><?php echo $linha[$i]["cpf"]; ?></td>
+   <td><?php echo $linha[$i]["login"]; ?></td>
+   <td><?php echo $linha[$i]["email"]; ?></td>
+   <td><?php echo $linha[$i]["telefone"]; ?></td>
+   <td><?php echo $linha[$i]["data_cadastro"]; ?></td>
    <td>
-      <a href="ver-produto.php?id=<?php echo $linha[$i]["id"]; ?>" class="btn btn-primary btn-xs" >ver</a>
-     <!-- <a href="editar-produto.php?id=<?php echo $linha[$i]["id"]; ?>" class="btn btn-warning btn-xs" >editar</a>
-      <a href="listar-produtos.php?id=<?php echo $linha[$i]["id"]; ?>" class="btn btn-danger btn-xs">excluir</a> -->
+      <a href="editar-representante-pai.php?id=<?php echo $linha[$i]["id"]; ?>" class="btn btn-warning btn-xs">editar</a>
+      <a href="representantes-pai.php?id=<?php echo $linha[$i]["id"]; ?>" class="btn btn-danger btn-xs">excluir</a>
    </td>
 
 </tr>
 
 <?php 
+
 endif;
+
 $i++;
+
 endwhile;
+
 
 ?>
 
@@ -137,7 +138,7 @@ endwhile;
 	    <script type="text/javascript" src="js/dataTables.bootstrap.js"></script>
 	    <script type="text/javascript">
 	           $(document).ready(function() {
-	                $('#dataSelect').dataTable({"order": [[ 0, "asc" ]],"language": {"url": "ptbr.json"} });
+	                $('#dataSelect').dataTable({"order": [[ 1, "asc" ]],"language": {"url": "ptbr.json"} });
 	           } );
 	    </script>
 
@@ -155,17 +156,14 @@ if($_GET["id"]):
 ?>
 <script type="text/javascript">
 
-
-    swal({   title: "Confirma a exclusão do produto?",   text: "Essa ação não pode ser revertida",   type: "warning",   showCancelButton: true,   confirmButtonColor: "#DD6B55",   confirmButtonText: "Sim, apagar",   cancelButtonText: "Não, cancelar!",   closeOnConfirm: false,   closeOnCancel: false }, function(isConfirm){   if (isConfirm) {   swal("Apagado!", "Produto apagado com sucesso.", "success");  location.href="excluir-produto.php?id=<?php echo $_GET['id']; ?>" } else {     swal("Cancelado", "Pedido cancelado", "error");   } });
-
-  
+    swal({   title: "Confirma a exclusão do representante?",   text: "Essa ação não pode ser revertida",   type: "warning",   showCancelButton: true,   confirmButtonColor: "#DD6B55",   confirmButtonText: "Sim, apagar",   cancelButtonText: "Não, cancelar!",   closeOnConfirm: false,   closeOnCancel: false }, function(isConfirm){   if (isConfirm) {   swal("Apagado!", "representante apagado com sucesso.", "success");  location.href="excluir-representante-pai.php?id=<?php echo $_GET['id']; ?>" } else {     swal("Cancelado", "Pedido cancelado", "error");   } });
 
 </script>
 <?php endif; ?>
 <?php 
 
 // ALERTA DE CONFIRMAÇÃO DE EXCLUSÃO DE CLIENTE
-if($_GET["status"]=="sucesso"): echo '<script type="text/javascript">swal("Muito bem!", "Produto foi removido com sucesso", "success");</script>'; endif; ?>
+if($_GET["status"]=="sucesso"): echo '<script type="text/javascript">swal("Muito bem!", "Representante foi removido com sucesso", "success");</script>'; endif; ?>
 
 
 <!-- END JAVASCRIPTS -->

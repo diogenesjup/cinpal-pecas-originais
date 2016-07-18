@@ -9,7 +9,7 @@
 		<div class="container">
 			<!-- BEGIN PAGE TITLE -->
 			<div class="page-title">
-				<h1>Produtos <small>Editar produto</small></h1>
+				<h1>Produtos <small>Adicionar produto</small></h1>
 			</div>
 			<!-- END PAGE TITLE -->
 			<!-- BEGIN PAGE TOOLBAR -->
@@ -32,14 +32,18 @@
 
 require("conexao.php");
 
-$id = $_GET["id"];
+//PEGAR O ULTIMO ID
+$titulo = "NNN";
+$sql = "INSERT INTO produtos(denominacao) VALUES(:titulo)";
+$stmt = $PDO->prepare( $sql );
+$stmt->bindParam( ':titulo', $titulo );
+ 
+$result = $stmt->execute();
 
-$sql = "SELECT * FROM produtos WHERE id = '$id'";
+$sql = "SELECT * FROM produtos ORDER BY id DESC LIMIT 1";
 $result = $PDO->query( $sql );
 $produto = $result->fetchAll( PDO::FETCH_ASSOC );
-
-$artigos_produto = $produto[0]["artigos"];
-
+$id = $produto[0]["id"];
 
 ?>
              
@@ -66,188 +70,129 @@ $artigos_produto = $produto[0]["artigos"];
 
 
 <div class="form-group">
+  <label>Origem:</label>
+  <select name="origem" class="form-control">
+      <option value="1">selecione uma origem</option>
+      <?php 
+      
+      $sql = "SELECT * FROM origem ORDER BY origem ASC";
+      $result = $PDO->query( $sql );
+      $origens = $result->fetchAll( PDO::FETCH_ASSOC );
+      $tot_origem = count($origens);
+      $i = 0;
+
+      while($i<$tot_origem):
+      ?>
+      <option value="<?php echo $origens[$i]["id"]; ?>"><?php echo $origens[$i]["descricao"]; ?></option>
+      <?php 
+      $i++;
+      endwhile;
+      ?>
+  </select>
+</div>
+
+
+
+<div class="form-group">
+  <label>Agregado:</label>
+  <select name="agregado" class="form-control">
+      <option value="1">selecione um agregado</option>
+      <?php 
+      
+      $sql = "SELECT * FROM agregado ORDER BY numero ASC";
+      $result = $PDO->query( $sql );
+      $origens = $result->fetchAll( PDO::FETCH_ASSOC );
+      $tot_origem = count($origens);
+      $i = 0;
+
+      while($i<$tot_origem):
+      ?>
+      <option value="<?php echo $origens[$i]["id"]; ?>"><?php echo $origens[$i]["descricao"]; ?></option>
+      <?php 
+      $i++;
+      endwhile;
+      ?>
+  </select>
+</div>
+
+
+
+<div class="form-group">
    <label>Número original</label>
-   <input type="text" name="num_original" class="form-control" value="<?php echo $produto[0]["num_original"]; ?>" />
+   <input type="text" name="num_original" class="form-control" placeholder="Número original" />
 </div>
 
 
 
 <div class="form-group">
    <label>Número Cinpal</label>
-   <input type="text" name="num_cinpal" class="form-control" value="<?php echo $produto[0]["num_cinpal"]; ?>" />
+   <input type="text" name="num_cinpal" class="form-control" placeholder="Número cinpal" />
 </div>
 
 
 <div class="form-group">
    <label>Denominação</label>
-   <input type="text" name="denominacao" class="form-control" value="<?php echo $produto[0]["denominacao"]; ?>" />
+   <input type="text" name="denominacao" class="form-control" placeholder="Denominação" />
 </div>
 
 
 <div class="form-group">
    <label>Modelo</label>
-   <input type="text" name="modelo" class="form-control" value="<?php echo $produto[0]["modelo"]; ?>" />
+   <input type="text" name="modelo" class="form-control" placeholder="Modelo" />
+</div>
+<div class="form-group">
+   <label>Número da peça dentro do desenho da figura</label>
+   <input type="text" name="numero_peca" class="form-control" placeholder="Número do item dentro do desenho da figura" />
 </div>
 
 <div class="form-group">
    <label>Posição</label>
-   <input type="text" name="posicao" class="form-control" value="<?php echo $produto[0]["posicao"]; ?>" />
+   <input type="text" name="posicao" class="form-control" placeholder="Posição" />
 </div>
 
 
 <div class="form-group">
    <label>Nota</label>
-   <textarea name="nota" class="form-control" rows="6"><?php echo $produto[0]["nota"]; ?></textarea>
+   <textarea name="nota" class="form-control" rows="6"></textarea>
 </div>
 
 
 <div class="form-group">
-  <label>Substituição 1:</label>
-  <select name="sub1" class="form-control">
-      <option value="N/A">selecione um produto</option>
-      <?php 
-      
-      $sql = "SELECT * FROM produtos ORDER BY num_cinpal ASC";
-      $result = $PDO->query( $sql );
-      $origens = $result->fetchAll( PDO::FETCH_ASSOC );
-      $tot_origem = count($origens);
-      $i = 0;
-
-      while($i<$tot_origem):
-         if($origens[$i]["denominacao"] != "NNN"):
-      ?>
-      <option value="<?php echo $origens[$i]["id"]; ?>" <?php if($origens[$i]["id"]==$produto[0]["sub1"]) echo "selected"; ?>><?php echo $origens[$i]["num_original"]; ?></option>
-      <?php 
-         endif;
-      $i++;
-      endwhile;
-      ?>
-  </select>
+  <label>Substituição:</label>
+  <input type="text" name="substituicao[]" class="form-control" placeholder="Número original do produto" />
+  <div id="moreSubs"></div>
+  <p class="help-block" style="text-align:right;">
+    <span id="addSubs" class="btn btn-primary btn-xs">adicionar mais</span>
+  </p>
+  <p>&nbsp;</p>
 </div>
 
 <div class="form-group">
-  <label>Substituição 2:</label>
-  <select name="sub2" class="form-control">
-      <option value="N/A">selecione um produto</option>
-      <?php 
-      
-      $sql = "SELECT * FROM produtos ORDER BY num_cinpal ASC";
-      $result = $PDO->query( $sql );
-      $origens = $result->fetchAll( PDO::FETCH_ASSOC );
-      $tot_origem = count($origens);
-      $i = 0;
-
-      while($i<$tot_origem):
-        if($origens[$i]["denominacao"] != "NNN"):
-      ?>
-      <option value="<?php echo $origens[$i]["id"]; ?>" <?php if($origens[$i]["id"]==$produto[0]["sub2"]) echo "selected"; ?>><?php echo $origens[$i]["num_cinpal"]; ?></option>
-      <?php 
-        endif;
-      $i++;
-      endwhile;
-      ?>
-  </select>
-</div>
-
-
-
-<div class="form-group">
-  <label>Substituição 3:</label>
-  <select name="sub3" class="form-control">
-      <option value="N/A">selecione um produto</option>
-      <?php 
-      
-      $sql = "SELECT * FROM produtos ORDER BY num_cinpal ASC";
-      $result = $PDO->query( $sql );
-      $origens = $result->fetchAll( PDO::FETCH_ASSOC );
-      $tot_origem = count($origens);
-      $i = 0;
-
-      while($i<$tot_origem):
-        if($origens[$i]["denominacao"] != "NNN"):
-      ?>
-      <option value="<?php echo $origens[$i]["id"]; ?>" <?php if($origens[$i]["id"]==$produto[0]["sub3"]) echo "selected"; ?>><?php echo $origens[$i]["num_cinpal"]; ?></option>
-      <?php 
-         endif;
-      $i++;
-      endwhile;
-      ?>
-  </select>
-</div>
-
-<div class="form-group">
-  <label>Substituição 4:</label>
-  <select name="sub4" class="form-control">
-      <option value="N/A">selecione um produto</option>
-      <?php 
-      
-      $sql = "SELECT * FROM produtos ORDER BY num_cinpal ASC";
-      $result = $PDO->query( $sql );
-      $origens = $result->fetchAll( PDO::FETCH_ASSOC );
-      $tot_origem = count($origens);
-      $i = 0;
-
-      while($i<$tot_origem):
-        if($origens[$i]["denominacao"] != "NNN"):
-      ?>
-      <option value="<?php echo $origens[$i]["id"]; ?>" <?php if($origens[$i]["id"]==$produto[0]["sub4"]) echo "selected"; ?>><?php echo $origens[$i]["num_cinpal"]; ?></option>
-      <?php
-         endif; 
-      $i++;
-      endwhile;
-      ?>
-  </select>
+  <label>Adicionais:</label>
+  <input type="text" name="adicionais[]" class="form-control" placeholder="Número original do produto" />
+  <div id="moreAdd"></div>
+  <p class="help-block" style="text-align:right;">
+    <span id="addAdcionais" class="btn btn-primary btn-xs">adicionar mais</span>
+  </p>
+  <p>&nbsp;</p>
 </div>
 
 
 <div class="form-group">
-  <label>Opcional 1:</label>
-  <select name="opc1" class="form-control">
-      <option value="N/A">selecione um produto</option>
-      <?php 
-      
-      $sql = "SELECT * FROM produtos ORDER BY num_cinpal ASC";
-      $result = $PDO->query( $sql );
-      $origens = $result->fetchAll( PDO::FETCH_ASSOC );
-      $tot_origem = count($origens);
-      $i = 0;
-
-      while($i<$tot_origem):
-          if($origens[$i]["denominacao"] != "NNN"):
-      ?>
-      <option value="<?php echo $origens[$i]["id"]; ?>" <?php if($origens[$i]["id"]==$produto[0]["op1"]) echo "selected"; ?>><?php echo $origens[$i]["num_cinpal"]; ?></option>
-      <?php
-          endif; 
-      $i++;
-      endwhile;
-      ?>
-  </select>
+  <label>Opicionais:</label>
+  <input type="text" name="opicionais[]" class="form-control" placeholder="Número original do produto" />
+  <div id="moreOpt"></div>
+  <p class="help-block" style="text-align:right;">
+    <span id="addOpcionais" class="btn btn-primary btn-xs">adicionar mais</span>
+  </p>
+  <p>&nbsp;</p>
 </div>
 
 
-<div class="form-group">
-  <label>Opcional 2:</label>
-  <select name="opc2" class="form-control">
-      <option value="N/A">selecione um produto</option>
-      <?php 
-      
-      $sql = "SELECT * FROM produtos ORDER BY num_cinpal ASC";
-      $result = $PDO->query( $sql );
-      $origens = $result->fetchAll( PDO::FETCH_ASSOC );
-      $tot_origem = count($origens);
-      $i = 0;
 
-      while($i<$tot_origem):
-          if($origens[$i]["denominacao"] != "NNN"):
-      ?>
-      <option value="<?php echo $origens[$i]["id"]; ?>" <?php if($origens[$i]["id"]==$produto[0]["op2"]) echo "selected"; ?>><?php echo $origens[$i]["num_cinpal"]; ?></option>
-      <?php  
-          endif;
-      $i++;
-      endwhile;
-      ?>
-  </select>
-</div>
+
+
+
 
 
                        <button class="btn btn-primary" type="submit">salvar informações</button>                      
@@ -272,8 +217,8 @@ $artigos_produto = $produto[0]["artigos"];
 
     <div class="panel panel-default">
       <div class="panel-heading">
-        <h4>Selecione um ou vários arquivos que deseja fazer upload</h4>
-        ou <a href="editor.php" class="btn btn-primary" target="_blank">Construir modelo</a>
+        <h4>Selecione um ou vários arquivos que deseja fazer upload</h4> ou
+        <a href="editor.php" class="btn btn-primary" target="_blank">Construir modelo</a>
 
         <div class="panel-ctrls">
         </div>
@@ -347,7 +292,6 @@ $artigos_produto = $produto[0]["artigos"];
                   <thead>
                     <th style="padding-left:8px;"><b>#</b></th>
                     <th style="padding-left:8px;"><b>foto</b></th>
-                    <th style="padding-left:8px;"><b>url</b></th>
                     <th style="padding-left:8px;"><b>Ações</b></th>                  
                   </thead>
                  
@@ -371,7 +315,6 @@ while($i<$tot_cliente):
 <tr>
    <td><?php echo $linha[$i]["id"]; ?></td>
    <td><img src="<?php echo $linha[$i]["foto"]; ?>" style="width:165px;padding:4px;border:1px solid #efefef;" /></td>
-   <td><?php echo $linha[$i]["foto"]; ?></td>
    <td>
      <a href="excluir-foto.php?id=<?php echo $linha[$i]["id"]; ?>&id_produto=<?php echo $id; ?>" class="btn btn-danger btn-xs">excluir</a>
    </td>
@@ -686,7 +629,48 @@ endwhile;
 <script src="assets/global/plugins/excanvas.min.js"></script> 
 <![endif]-->
 <script src="js/jquery-2.1.4.js" type="text/javascript"></script>
-<!-- IMPORTANT! Load jquery-ui.min.js before bootstrap.min.js to fix bootstrap tooltip conflict with jquery ui tooltip -->
+
+<!-- APPEND ITENS -->
+
+<script>
+
+      jQuery(document).ready(function ($) {
+
+          // ADCIONAR SUBSTITUTOS 
+          //
+          //$('body').on("click", '#addSubs', function () {
+          $('#addSubs').click(function(){  
+              $('#moreSubs').append('<p>&nbsp;</p><input type="text" name="substituicao[]" class="form-control" placeholder="Número original do produto" />')
+              
+          });
+          
+
+          // ADICIONAR ADICIONAIS
+          //
+          //$('body').on("click", '#addAdcionais', function () {
+          $('#addAdcionais').click(function(){  
+              $('#moreAdd').append('<p>&nbsp;</p><input type="text" name="adicionais[]" class="form-control" placeholder="Número original do produto" />')
+              
+          });
+          
+          // ADICIONAR OPCIONAIS
+          // 
+          //$('body').on("click", '#addOpcionais', function () {
+          $('#addOpcionais').click(function(){  
+              $('#moreOpt').append('<p>&nbsp;</p><input type="text" name="opicionais[]" class="form-control" placeholder="Número original do produto" />')
+              
+          });
+
+      });
+
+
+
+  </script>
+
+
+
+
+
 <script src="js/jqueryui-1.9.2.min.js" type="text/javascript"></script>
 
 <!-- The jQuery UI widget factory, can be omitted if jQuery UI is already included -->
@@ -845,15 +829,7 @@ endif;
 
 ?>
 
-<script>
-jQuery(document).ready(function() {    
-   Metronic.init(); // init metronic core componets
-   Layout.init(); // init layout
-   Demo.init(); // init demo(theme settings page)
-   Index.init(); // init index page
-   Tasks.initDashboardWidget(); // init tash dashboard widget
-});
-</script>
+
 <!-- END JAVASCRIPTS -->
 </body>
 <!-- END BODY -->
